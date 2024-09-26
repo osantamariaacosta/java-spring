@@ -27,6 +27,7 @@ public class UserRestController {
     }
 
     @PostMapping
+    @PreAuthorize("hasAnyRole('ADMIN', 'SUPER_ADMIN')")
     public User addUser(@RequestBody User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         return UserRepository.save(user);
@@ -58,6 +59,7 @@ public class UserRestController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'SUPER_ADMIN')")
     public void deleteUser(@PathVariable Long id) {
         UserRepository.deleteById(id);
     }

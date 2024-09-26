@@ -1,7 +1,8 @@
 package com.project.demo.rest.game;
 
-import com.project.demo.logic.entity.games.Game;
-import com.project.demo.logic.entity.games.GameRepository;
+import com.project.demo.logic.entity.game.Game;
+import com.project.demo.logic.entity.game.GameRepository;
+import com.project.demo.logic.entity.user.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -16,15 +17,10 @@ public class GameRestController {
 
     @GetMapping
     @PreAuthorize("hasAnyRole('ADMIN', 'SUPER_ADMIN', 'USER')")
-    public List<Game> getAllGames() {
-        return  gameRepository.findAll();
+    public List<Game> getAllGames(){
+        return gameRepository.findAll();
     }
 
-    @PostMapping
-    @PreAuthorize("hasAnyRole('ADMIN', 'SUPER_ADMIN')")
-    public Game  addGame(@RequestBody Game game) {
-        return gameRepository.save(game);
-    }
 
     @PutMapping("/{id}")
     @PreAuthorize("hasAnyRole('ADMIN', 'SUPER_ADMIN')")
@@ -33,7 +29,8 @@ public class GameRestController {
                 .map(existingGame -> {
                     existingGame.setName(game.getName());
                     existingGame.setDescription(game.getDescription());
-                    existingGame.setDescription(game.getImgURL());
+                    existingGame.setImgURL(game.getImgURL());
+                    existingGame.setStatus(game.getStatus());
                     return gameRepository.save(existingGame);
                 })
                 .orElseGet(() -> {
@@ -42,11 +39,16 @@ public class GameRestController {
                 });
     }
 
-    @DeleteMapping("/{id}")
+    @PostMapping
     @PreAuthorize("hasAnyRole('ADMIN', 'SUPER_ADMIN')")
+    public Game addGame(@RequestBody Game game) {
+        return  gameRepository.save(game);
+    }
+
+    @PreAuthorize("hasAnyRole('ADMIN', 'SUPER_ADMIN')")
+    @DeleteMapping("/{id}")
     public void deleteGame (@PathVariable Long id) {
         gameRepository.deleteById(id);
     }
-
 
 }
