@@ -142,4 +142,12 @@ public class User implements UserDetails {
 
         return this;
     }
+
+    public List<Order> getOrders() {
+        return orders;
+    }
+
+    public void setOrders(List<Order> orders) {
+        this.orders = orders;
+    }
 }

@@ -1,5 +1,6 @@
 package com.project.demo.logic.entity.order;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.project.demo.logic.entity.user.User;
 import jakarta.persistence.*;
 
@@ -13,6 +14,7 @@ public class Order {
     private String description;
     private Double total;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name =  "user_id")
     private User user;
